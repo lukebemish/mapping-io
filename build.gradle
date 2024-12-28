@@ -13,7 +13,7 @@ allprojects {
 	apply plugin: "com.diffplug.spotless"
 	apply plugin: "me.modmuss50.remotesign"
 
-	group "net.fabricmc"
+	group "dev.lukebemish.mirror.net.fabricmc"
 
 	tasks.withType(JavaCompile).configureEach {
 		it.options.encoding = "UTF-8"
@@ -55,6 +55,15 @@ allprojects {
 
 		sourceCompatibility = 1.8
 		targetCompatibility = 1.8
+	}
+
+	['apiElements', 'runtimeElements', 'javadocElements', 'sourcesElements'].each {
+		configurations.named(it) {
+			outgoing {
+				capability(project.group + ":" + project.name + ":" + project.version as String)
+				capability("net.fabricmc:" + project.name + ":" + project.version as String)
+			}
+		}
 	}
 
 	test {
